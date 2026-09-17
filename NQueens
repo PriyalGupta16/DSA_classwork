@@ -1,0 +1,57 @@
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        char[][] board = new char[n][n];
+        for(int i = 0; i < n; i++){
+            Arrays.fill(board[i], '.');
+        }
+        List<List<String>> ans = new ArrayList<>();
+        nQueens(board, 0, n, ans);
+        return ans;
+    }
+
+    private void nQueens(char[][] board, int row, int n, List<List<String>> ans){
+        if(row == n){
+            ans.add(construct(board));
+            return;
+        }
+        for(int j = 0; j < n; j++){
+            if(isSafe(board, row, j, n)){
+                board[row][j] = 'Q';
+                nQueens(board, row+1, n, ans);
+                board[row][j] = '.';
+            }
+        }
+    }
+
+    private boolean isSafe(char[][] board, int row, int col, int n){
+        for(int j = 0; j < n; j++){
+            if(board[row][j] == 'Q'){ // for horizontal safe point
+                return false;
+            }
+        }
+        for(int i = 0; i < n; i++){
+            if(board[i][col] == 'Q'){ // for vertical safe point
+                return false;
+            }
+        }
+        for(int i = row, j = col; i >= 0 && j >= 0; i--, j--){
+            if(board[i][j] == 'Q'){ // for left diagonal safe point
+                return false;
+            }
+        }
+        for(int i = row, j = col; i >= 0 && j < n; i--, j++){
+            if(board[i][j] == 'Q'){ // for right diagonal safe point
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<String> construct(char[][] board){
+        List<String> res = new ArrayList<>();
+        for(char[] row : board){
+            res.add(new String(row));
+        }
+        return res;
+    }
+}
